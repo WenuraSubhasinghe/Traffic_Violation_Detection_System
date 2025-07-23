@@ -1,0 +1,50 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# Logs
+*.log
+logs/
+*.out
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.swp
+
+# Test outputs
+.coverage
+htmlcov/
+pytest_cache/
+.mypy_cache/
+.cache/
+
+# Environment files
+.env
+.env.*
+
+# FastAPI specific outputs
+outputs/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Other
+*.bak
+*.tmp
