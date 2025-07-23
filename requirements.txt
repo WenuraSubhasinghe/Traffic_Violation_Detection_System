@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pymongo
+motor
+pydantic
+ultralytics==8.3.0
+deep-sort-realtime
+opencv-python
+numpy
+pillow
+python-dotenv 
