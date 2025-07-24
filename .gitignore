@@ -41,6 +41,7 @@ pytest_cache/
 
 # FastAPI specific outputs
 outputs/
+inputs/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
