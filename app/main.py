@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from app.routes import router as core_router
 from app.routes_accidents import router as accidents_router
 from app.routes_speed import router as speed_router
+from app.routes_fraud import router as fraud_router
 import os
 
 app = FastAPI(title="Traffic Backend")
@@ -30,6 +31,7 @@ app.add_middleware(
 app.include_router(core_router)
 app.include_router(accidents_router)
 app.include_router(speed_router)
+app.include_router(fraud_router)
 
 @app.get("/")
 def root():
