@@ -9,3 +9,5 @@ opencv-python
 numpy
 pillow
 python-dotenv 
+python-multipart
+tensorflow
