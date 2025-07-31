@@ -11,7 +11,6 @@ except ImportError:
     print('Please install ultralytics (pip install ultralytics).')
     exit(1)
 
-
 # --- Define your lane lines and colors here ---
 lane_lines = [
     ((30, 1120), (740, 520)),
@@ -192,8 +191,8 @@ class LaneChangeDetector:
                         self.lane_changed_vehicles.add(object_id)
                         timestamp = frame_idx / fps
 
-                       
-                        plate_number = ""
+                        # Plate recognition on current frame crop
+                        plate_number = "N/A"
                         x1_int, y1_int, x2_int, y2_int = map(int, [x1, y1, x2, y2])
                         vehicle_crop = self.current_frame[y1_int:y2_int, x1_int:x2_int]
                         if vehicle_crop.size > 0:
@@ -277,7 +276,7 @@ class LaneChangeDetector:
                     break
 
                 frame_idx += 1
-                self.current_frame = frame.copy()  
+                self.current_frame = frame.copy()  # For OCR
 
                 frame = self.draw_lanes_and_regions(frame)
                 detections = self.detect_vehicles(frame)
@@ -327,7 +326,7 @@ class LaneChangeDetector:
 
         print(f"\nTotal lane changes detected: {len(lane_change_events)}")
         for i, event in enumerate(lane_change_events):
-            plate_desc = f" (Plate: {event.get('plate_number', '')})" if event.get('plate_number') else ""
+            plate_desc = f" (Plate: {event.get('plate_number', '')})" if event.get('plate_number') and event.get('plate_number') != "N/A" else ""
             mins = int(event['timestamp'] // 60)
             secs = int(event['timestamp'] % 60)
             print(f"{i + 1}. Vehicle ID {event['track_id']} changed from lane {event['from_lane']} to lane {event['to_lane']} at {mins}:{secs:02d}{plate_desc}")

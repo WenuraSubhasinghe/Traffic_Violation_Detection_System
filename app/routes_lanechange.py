@@ -4,6 +4,7 @@ from datetime import datetime
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
 from app.services.lane_change_detection.lane_change_detection import LaneChangeDetector
+from app.utils.video_converter import convert_to_browser_compatible
 
 router = APIRouter(prefix="/lanechange", tags=["Lane Change Detection"])
 
@@ -25,6 +26,8 @@ async def run_lane_change_detection(file: UploadFile = File(...)):
 
         # Run detection and collect events
         lanechange_events = _service.process_video(video_path, output_path, show_display=False)
+
+      
 
         # Response with event details, including plate_number
         change_details = []
@@ -51,6 +54,7 @@ async def run_lane_change_detection(file: UploadFile = File(...)):
                 "plates": plates,
             })
 
+
         summary = {
             "total_detected_lane_changes": len(change_details),
             "total_tracked_vehicles": len(getattr(_service, "vehicle_tracks", {})),
@@ -58,6 +62,8 @@ async def run_lane_change_detection(file: UploadFile = File(...)):
             "processed_at": datetime.utcnow(),
         }
 
+  # Convert in-place (keep same name)
+        convert_to_browser_compatible(output_path)
         return {
             "annotated_video_url": f"http://127.0.0.1:8000/static/lanechange_{file.filename}",
             "summary": summary,
