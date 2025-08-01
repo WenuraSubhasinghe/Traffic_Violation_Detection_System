@@ -6,6 +6,8 @@ from app.services.u_turn_detection.u_turn_detection import UTurnDetector
 from app.database import db
 from datetime import datetime
 
+from app.utils.video_converter import convert_to_browser_compatible
+
 router = APIRouter(prefix="/uturn", tags=["U-Turn Detection"])
 _service = UTurnDetector()
 
@@ -82,7 +84,8 @@ async def run_uturn_detection(file: UploadFile = File(...)):
                 "created_at": datetime.utcnow()
             } for d in uturn_details]
             # await db.uturn_records.insert_many(docs)
-
+            convert_to_browser_compatible(output_path)
+            
         return {
             "annotated_video_url": f"http://127.0.0.1:8000/static/uturn_{file.filename}",
             "summary": summary,
