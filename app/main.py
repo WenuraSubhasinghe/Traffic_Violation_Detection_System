@@ -5,7 +5,9 @@ from app.routes import router as core_router
 from app.routes_accidents import router as accidents_router
 from app.routes_speed import router as speed_router
 from app.routes_fraud import router as fraud_router
+from app.routes_u_turn import router as uturn_router
 from app.routes_lanechange import router as lane_router
+from app.routes_lanepatheval import router as lane_eval
 import os
 
 app = FastAPI(title="Traffic Backend")
@@ -33,7 +35,9 @@ app.include_router(core_router)
 app.include_router(accidents_router)
 app.include_router(speed_router)
 app.include_router(fraud_router)
+app.include_router(uturn_router)
 app.include_router(lane_router)
+app.include_router(lane_eval)
 
 
 @app.get("/")
