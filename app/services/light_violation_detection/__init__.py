@@ -1,0 +1,1 @@
+from app.services.light_violation_detection.config    import LIVE, MODEL, CLASSES, PALLETES

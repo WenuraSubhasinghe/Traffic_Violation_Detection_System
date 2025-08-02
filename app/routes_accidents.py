@@ -18,11 +18,24 @@ _service = AccidentDetectionService()
 
 
 @router.post("/run")
-async def run_accident_detection(video_name: str = "test_video.mp4"):
-    video_path = os.path.join("videos", video_name)
-    if not os.path.exists(video_path):
-        raise HTTPException(status_code=404, detail="Video not found.")
-    doc = await _service.process_video(video_path)
+async def run_accident_detection(file: UploadFile = File(...)):
+    os.makedirs("inputs", exist_ok=True)
+    os.makedirs("outputs", exist_ok=True)
+
+    video_path = os.path.join("inputs", file.filename)
+
+    try:
+        # Save uploaded file to disk
+        with open(video_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
+    
+    try:
+        doc = await _service.process_video(video_path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Processing failed: {str(e)}")
+    
     # Convert ObjectId to str for JSON response
     doc["_id"] = str(doc["_id"])
     return doc

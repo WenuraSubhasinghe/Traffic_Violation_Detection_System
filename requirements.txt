@@ -11,3 +11,7 @@ pillow
 python-dotenv 
 python-multipart
 tensorflow
+joblib
+scikit-learn
+easyocr
+python-dotenv

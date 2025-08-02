@@ -8,6 +8,7 @@ from app.routes_fraud import router as fraud_router
 from app.routes_u_turn import router as uturn_router
 from app.routes_lanechange import router as lane_router
 from app.routes_lanepatheval import router as lane_eval
+from app.routes_ligh_violation import router as light_violation_router
 import os
 
 app = FastAPI(title="Traffic Backend")
@@ -38,6 +39,7 @@ app.include_router(fraud_router)
 app.include_router(uturn_router)
 app.include_router(lane_router)
 app.include_router(lane_eval)
+app.include_router(light_violation_router)
 
 
 @app.get("/")
