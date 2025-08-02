@@ -16,6 +16,7 @@ from app.services.accident_detection.accident_config import AccidentConfig
 from app.services.accident_detection.yolo_detector import YoloAccidentDetector, RED, YELLOW, GREEN
 from app.services.accident_detection.tracker import VehicleTracker
 from app.services.accident_detection.collision_aabb import CollisionDetector
+from app.utils.video_converter import convert_to_browser_compatible
 
 
 class AccidentDetectionService:
@@ -134,6 +135,7 @@ class AccidentDetectionService:
         cap.release()
         if writer is not None:
             writer.release()
+            out_path = convert_to_browser_compatible(out_path, overwrite=True)
 
         results = {
             "video_path": video_path,

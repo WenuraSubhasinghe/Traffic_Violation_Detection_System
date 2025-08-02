@@ -1,43 +1,23 @@
 import subprocess
 import os
 
-def convert_to_browser_compatible(input_path: str) -> str:
-    dir_name = os.path.dirname(input_path)
-    base_name = os.path.basename(input_path)
-    name, ext = os.path.splitext(base_name)
+def convert_to_browser_compatible(input_path: str, overwrite: bool = True) -> str:
     
-    temp_path = os.path.join(dir_name, f"{name}_temp{ext}")
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"Video file not found: {input_path}")
     
+    output_path = input_path if overwrite else input_path.replace(".mp4", "_fixed.mp4")
+
     command = [
-        r"C:/Users/yasir/Downloads/ffmpeg-master-latest-win64-gpl/ffmpeg-master-latest-win64-gpl/bin/ffmpeg.exe",
-        '-y',
-        '-i', input_path,
-        '-c:v', 'libx264',
-        '-profile:v', 'baseline',
-        '-level', '3.0',
-        '-pix_fmt', 'yuv420p',
-        '-c:a', 'aac',
-        '-strict', 'experimental',
-        temp_path
+        "ffmpeg", "-y",
+        "-i", input_path,
+        "-c:v", "libx264",
+        "-preset", "fast",
+        "-pix_fmt", "yuv420p",
+        "-movflags", "+faststart",
+        output_path,
     ]
 
-    print("Running command:", " ".join(command))
-    
-    try:
-        completed_process = subprocess.run(command, check=True, capture_output=True, text=True)
-        print("FFmpeg output:", completed_process.stdout)
-        print("FFmpeg errors (if any):", completed_process.stderr)
-        
-        # Replace the original file with the converted temp file
-        os.replace(temp_path, input_path)
-    except subprocess.CalledProcessError as e:
-        print("FFmpeg failed:", e.stderr)
-        raise RuntimeError(f"FFmpeg failed: {e.stderr}")
-    except Exception as e:
-        # Clean up temp file if it exists to avoid clutter
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
-        raise RuntimeError(f"Post-processing failed: {e}")
+    subprocess.run(command, check=True)
 
-    print(f"Replaced original video with browser-compatible video: {input_path}")
-    return input_path
+    return output_path

@@ -1,0 +1,39 @@
+# Enhanced config.yaml for Meta-YOLOv8
+live_mode: false
+model_size: 'extra large'
+
+# Model configuration with Meta-YOLOv8 focus
+models:
+  default: './models/yolov8s.pt'
+  meta_yolo: './models/yolov8s.pt' 
+
+# Enhanced detection settings for Meta-YOLOv8
+detection_settings:
+  use_meta_yolo: true                    # Enable Meta-YOLOv8 by default
+  adaptive_confidence: true              # Use adaptive confidence thresholds
+  enhanced_color_recognition: true       # Enable enhanced color detection
+  weather_adaptation: true               # Enable weather-based adaptations
+
+# Confidence thresholds for different conditions
+confidence_thresholds:
+  clear_weather: 0.5
+  challenging_conditions: 0.3            # Lower for fog, rain, low light
+  night_mode: 0.25                       # Lowest for nighttime
+
+object_classes:
+  2: car
+  3: motorcycle  
+  5: bus
+  7: truck
+  9: traffic light
+
+color_pallete:
+  red: [255, 0, 0]
+  amber: [255, 191, 0]
+  lime: [0, 255, 0]
+  emeralad: [0, 128, 128]
+  cyan: [0, 255, 255]
+  blue: [0, 0, 255]
+  violet: [128, 0, 128]
+  fucshia: [255, 0, 255]
+  rose: [255, 192, 203]

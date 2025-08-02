@@ -13,3 +13,4 @@ python-multipart
 tensorflow
 joblib
 scikit-learn
+easyocr
