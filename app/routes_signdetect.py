@@ -9,6 +9,7 @@ from starlette.concurrency import run_in_threadpool
 
 # Import your service (be sure this import path matches your structure)
 from app.services.sign_detection.sign_detection import SignDetectionService
+from app.utils.video_converter import convert_to_browser_compatible
 
 router = APIRouter(prefix="/signs", tags=["Signs"])
 
@@ -21,14 +22,16 @@ async def run_sign_detection(file: UploadFile = File(...)):
     input_dir = "input_data"
     os.makedirs(input_dir, exist_ok=True)
     video_path = os.path.join(input_dir, file.filename)
+    output_path = os.path.join("outputs", f"uturn_{file.filename}")
     with open(video_path, "wb") as f:
         shutil.copyfileobj(file.file, f)
     # Run detection in background thread
     result = await run_in_threadpool(_service.process_video, video_path)
 
-    # Optionally augment the result with a public static URL if needed
+# Optionally augment the result with a public static URL if needed
+    convert_to_browser_compatible(output_path)
     response = {
-        "annotated_video_url": f"http://127.0.0.1:8000/static/{os.path.basename(result['output_video'])}" if result.get("output_video") else None,
+        "annotated_video_url": f"http://127.0.0.1:8000/static/signdetect_{file.filename}" if result.get("output_video") else None,
         "csv_summary": result.get("csv_summary"),
         "json_summary": result.get("json_summary"),
         "class_counts": result.get("class_counts")
