@@ -7,7 +7,7 @@ from collections import Counter
 class LaneDetectionService:
     def __init__(
         self,
-        model_path: str = "models\road_mark_detection_model\road_mark_best.pt",
+        model_path: str = "models/road_mark_detection_model/road_mark_best.pt",
         output_dir: str = "outputs"
     ):
         self.model = YOLO(model_path)
