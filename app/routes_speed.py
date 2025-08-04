@@ -20,12 +20,12 @@ async def run_speed_detection(file: UploadFile = File(...)):
     output_path = os.path.join("outputs", f"annotated_{file.filename}")
 
     try:
-        # Save uploaded file
         with open(video_path, "wb") as f:
             shutil.copyfileobj(file.file, f)
 
-        # Process video
         result = await _service.process_video(video_path, output_path)
+        if result is None:
+            raise HTTPException(status_code=500, detail="Video processing failed result is none")
 
         # Extract violation details from result
         violation_details = []
@@ -59,8 +59,15 @@ async def run_speed_detection(file: UploadFile = File(...)):
                 "violations": vehicle_violations
             })
 
+        # Construct URLs for output files
+        video_filename = os.path.basename(result["summary"]["video_path"])
+        ref_points_filename = os.path.basename(result["reference_points_image"]) if result["reference_points_image"] else None
+        transformed_filename = os.path.basename(result["transformed_image"]) if result["transformed_image"] else None
+
         return {
-            "annotated_video_url": f"http://127.0.0.1:8000/static/annotated_{file.filename}",
+            "annotated_video_url": f"http://127.0.0.1:8000/static/{video_filename}",
+            "reference_points_image_url": f"http://127.0.0.1:8000/static/{ref_points_filename}" if ref_points_filename else None,
+            "transformed_image_url": f"http://127.0.0.1:8000/static/{transformed_filename}" if transformed_filename else None,
             "summary": {
                 **result["summary"],
                 "violation_summary": {
