@@ -9,6 +9,9 @@ from app.routes_u_turn import router as uturn_router
 from app.routes_lanechange import router as lane_router
 from app.routes_lanepatheval import router as lane_eval
 from app.routes_ligh_violation import router as light_violation_router
+from app.routes_roadmark import router as road_mark_detect_router
+from app.routes_signdetect import router as road_signs
+from app.routes_legacy_plate import router as legacy_plate
 import os
 
 app = FastAPI(title="Traffic Backend")
@@ -40,6 +43,9 @@ app.include_router(uturn_router)
 app.include_router(lane_router)
 app.include_router(lane_eval)
 app.include_router(light_violation_router)
+app.include_router(road_mark_detect_router)
+app.include_router(road_signs)
+app.include_router(legacy_plate)
 
 
 @app.get("/")
